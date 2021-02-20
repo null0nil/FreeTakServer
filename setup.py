@@ -14,7 +14,8 @@ setup(
         "FreeTAKServer.controllers",
         "FreeTAKServer.controllers.configuration",
         "FreeTAKServer.controllers.services",
-#        "FreeTAKServer.controllers.model",
+        "FreeTAKServer.controllers.DatabaseControllers",
+        #        "FreeTAKServer.controllers.model",
 # TC 2021-02-20 (Sat) --
     ],  # Chose the same as "name"
     version=version,  # Start with a small number and increase it with every change you make
