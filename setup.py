@@ -13,7 +13,8 @@ setup(
         "FreeTAKServer",
         "FreeTAKServer.controllers",
         "FreeTAKServer.controllers.configuration",
-        "FreeTAKServer.controllers.model",
+#        "FreeTAKServer.controllers.model",
+# TC 2021-02-20 (Sat) --
     ],  # Chose the same as "name"
     version=version,  # Start with a small number and increase it with every change you make
     license="MIT",  # Chose a license from here: https://help.github.com/articles/licensing-a-repository
