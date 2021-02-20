@@ -19,9 +19,9 @@ class MainConfig:
     # User Connection package IP needs to be set to the IP which is used when creating the connection in your tak device
     UserConnectionIP = str(os.env.get('FTS_USER_ADDRESS', "0.0.0.0"))
 
-    python_version = 'python3.8'
-
-    userpath = '/usr/local/lib/'
+    # python_version = 'python3.8'
+    # userpath = '/usr/local/lib/'
+    # TC 2021-02-20 (Sat) --
 
     # api port
     APIPort = os.env.get('FTS_API_PORT', 19023)
@@ -42,12 +42,17 @@ class MainConfig:
     SaveCoTToDB = bool(os.env.get('FTS_COT_TO_DB', True))
 
     # this should be set before startup
-    DBFilePath = str(os.env.get('FTS_DB_PATH', r'/root/FTSDataBase.db'))
+    # DBFilePath = str(os.env.get('FTS_DB_PATH', r'/root/FTSDataBase.db'))
+    DBFilePath = str(r'/tmp/FTSDataBase.db') # TC 2021-02-20 (Sat) --
 
     # the version information of the server (recommended to leave as default)
     version = 'FreeTAKServer-1.5.10 RC 1'
 
-    MainPath = str(Path(fr'{userpath}{python_version}/dist-packages/FreeTAKServer'))
+    # MainPath = str(Path(fr'{userpath}{python_version}/dist-packages/FreeTAKServer'))
+    # TC 2021-02-20 (Sat) --
+    thisFileParts = str(Path(__file__).parent.absolute()).split('/')
+    idxEnd = thisFileParts.index("FreeTAKServer") + 1
+    MainPath = "/".join(thisFileParts[:idxEnd])
 
     ExCheckMainPath = str(Path(fr'{MainPath}/ExCheck'))
 
