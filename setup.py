@@ -13,6 +13,7 @@ setup(
         "FreeTAKServer",
         "FreeTAKServer.controllers",
         "FreeTAKServer.controllers.configuration",
+        "FreeTAKServer.controllers.services",
 #        "FreeTAKServer.controllers.model",
 # TC 2021-02-20 (Sat) --
     ],  # Chose the same as "name"
