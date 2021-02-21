@@ -541,51 +541,53 @@ class FTS:
             pass
 
     def startup(self, CoTPort, CoTIP, DataPackagePort, DataPackageIP, SSLDataPackagePort, SSLDataPackageIP, RestAPIPort, RestAPIIP, SSLCoTPort, SSLCoTIP, AutoStart, firstStart = False, UI="False"):
+        self.dbController.remove_user()
+        self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServiceStatus = 'start'
+        self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServicePort = RestAPIPort
+        self.FTSServiceStartupConfigObject.RestAPIServiceIP = RestAPIIP
+        if firstStart:
+            from datetime import datetime as dt
+            self.StartupTime = dt.now()
+        else:
+            pass
+
+        if AutoStart == 'False':
+            StartupObject = FTSObj()
+            StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
+            StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
+            StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
+            self.start_restAPI_service(StartupObject)
+
+        else:
+            StartupObject = FTSObj()
+            StartupObject.CoTService.CoTServiceIP = CoTIP
+            StartupObject.CoTService.CoTServicePort = CoTPort
+            StartupObject.CoTService.CoTServiceStatus = 'start'
+
+            StartupObject.TCPDataPackageService.TCPDataPackageServiceIP = DataPackageIP
+            StartupObject.TCPDataPackageService.TCPDataPackageServicePort = DataPackagePort
+            StartupObject.TCPDataPackageService.TCPDataPackageServiceStatus = 'start'
+
+            # StartupObject.SSLDataPackageService.SSLDataPackageServiceIP = SSLDataPackageIP
+            # StartupObject.SSLDataPackageService.SSLDataPackageServicePort = SSLDataPackagePort
+            # StartupObject.SSLDataPackageService.SSLDataPackageServiceStatus = 'start'
+
+            StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
+            StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
+            StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
+
+            StartupObject.FederationClientService.FederationClientServiceStatus = 'start'
+
+            #StartupObject.FederationServerService.FederationServerServiceStatus = ''
+
+            StartupObject.SSLCoTService.SSLCoTServiceStatus = 'start'
+            StartupObject.SSLCoTService.SSLCoTServiceIP = SSLCoTIP
+            StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
+            self.start_restAPI_service(StartupObject)
+
+            self.start_all(StartupObject)
+        
         try:
-            self.dbController.remove_user()
-            self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServiceStatus = 'start'
-            self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServicePort = RestAPIPort
-            self.FTSServiceStartupConfigObject.RestAPIServiceIP = RestAPIIP
-            if firstStart:
-                from datetime import datetime as dt
-                self.StartupTime = dt.now()
-            else:
-                pass
-            if AutoStart == 'False':
-                StartupObject = FTSObj()
-                StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
-                StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
-                StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
-                self.start_restAPI_service(StartupObject)
-
-            else:
-                StartupObject = FTSObj()
-                StartupObject.CoTService.CoTServiceIP = CoTIP
-                StartupObject.CoTService.CoTServicePort = CoTPort
-                StartupObject.CoTService.CoTServiceStatus = 'start'
-
-                StartupObject.TCPDataPackageService.TCPDataPackageServiceIP = DataPackageIP
-                StartupObject.TCPDataPackageService.TCPDataPackageServicePort = DataPackagePort
-                StartupObject.TCPDataPackageService.TCPDataPackageServiceStatus = 'start'
-
-                StartupObject.SSLDataPackageService.SSLDataPackageServiceIP = SSLDataPackageIP
-                StartupObject.SSLDataPackageService.SSLDataPackageServicePort = SSLDataPackagePort
-                StartupObject.SSLDataPackageService.SSLDataPackageServiceStatus = 'start'
-
-                StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
-                StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
-                StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
-
-                StartupObject.FederationClientService.FederationClientServiceStatus = 'start'
-
-                #StartupObject.FederationServerService.FederationServerServiceStatus = ''
-
-                StartupObject.SSLCoTService.SSLCoTServiceStatus = 'start'
-                StartupObject.SSLCoTService.SSLCoTServiceIP = SSLCoTIP
-                StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
-                self.start_restAPI_service(StartupObject)
-
-                self.start_all(StartupObject)
 
             while True:
                 try:
@@ -610,6 +612,7 @@ if __name__ == "__main__":
     y = FreeTAKServerUI.create_app()
     UIProc = multiprocessing.Process(target=FreeTAKServerUI.app, args=())
     UIProc.start()"""
+    print ("hello")
     try:
         parser = argparse.ArgumentParser(description=OrchestratorConstants().FULLDESC)
         parser.add_argument('-CoTPort', type=int, help=OrchestratorConstants().COTPORTDESC,
@@ -635,8 +638,11 @@ if __name__ == "__main__":
         parser.add_argument('-AutoStart', type=str, help='whether or not you want all services to start or only the root service and the RestAPI service', default='True')
         parser.add_argument('-UI', type=str, help="set to true if you would like to start UI on server startup")
         args = parser.parse_args()
-        AtakOfTheCerts().bake_startup()
-        CreateStartupFilesController()
-        FTS().startup(args.CoTPort, args.CoTIP, args.DataPackagePort, args.DataPackageIP, args.SSLDataPackagePort, args.SSLDataPackageIP, args.RestAPIPort, args.RestAPIIP, args.SSLCoTPort, args.SSLCoTIP, args.AutoStart, True, args.UI)
     except Exception as e:
         print(e)
+
+
+    AtakOfTheCerts().bake_startup()
+    CreateStartupFilesController()
+    FTS().startup(args.CoTPort, args.CoTIP, args.DataPackagePort, args.DataPackageIP, args.SSLDataPackagePort, args.SSLDataPackageIP, args.RestAPIPort, args.RestAPIIP, args.SSLCoTPort, args.SSLCoTIP, args.AutoStart, True, args.UI)
+        
