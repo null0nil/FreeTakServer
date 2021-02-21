@@ -73,14 +73,16 @@ class FTS:
             logger.error('an exception has been thrown in RestAPI Startup ' + str(e))
 
     def start_CoT_service(self, FTSServiceStartupConfigObject):
+
+        self.ClientDataPipe, ClientDataPipeParentChild = multiprocessing.Pipe()
+        self.TCPCoTService, self.TCPCoTServiceFTSPipe = multiprocessing.Pipe(duplex=True)
+        self.CoTPoisonPill = multiprocessing.Event()
+        self.CoTPoisonPill.set()
+        self.ReceiveConnectionsReset = multiprocessing.Event()
+        self.CoTService = multiprocessing.Process(target=TCPCoTServiceController().start, args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP, FTSServiceStartupConfigObject.CoTService.CoTServicePort, self.CoTPoisonPill, ClientDataPipeParentChild, self.ReceiveConnectionsReset, self.TCPCoTService))
+        self.CoTService.start()
+
         try:
-            self.ClientDataPipe, ClientDataPipeParentChild = multiprocessing.Pipe()
-            self.TCPCoTService, self.TCPCoTServiceFTSPipe = multiprocessing.Pipe(duplex=True)
-            self.CoTPoisonPill = multiprocessing.Event()
-            self.CoTPoisonPill.set()
-            self.ReceiveConnectionsReset = multiprocessing.Event()
-            self.CoTService = multiprocessing.Process(target=TCPCoTServiceController().start, args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP, FTSServiceStartupConfigObject.CoTService.CoTServicePort, self.CoTPoisonPill, ClientDataPipeParentChild, self.ReceiveConnectionsReset, self.TCPCoTService))
-            self.CoTService.start()
             self.pipeList['TCPCoTServiceFTSPipe'] = self.TCPCoTServiceFTSPipe
             self.FilterGroup.receivers.append(self.TCPCoTServiceFTSPipe)
             self.FilterGroup.sources.append(self.TCPCoTServiceFTSPipe)
@@ -590,7 +592,8 @@ class FTS:
 
             # self.start_all(StartupObject)
             self.start_CoT_service(StartupObject)
-        
+
+        1/0
         try:
 
             while True:
