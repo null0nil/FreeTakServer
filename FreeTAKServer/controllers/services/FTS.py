@@ -573,9 +573,10 @@ class FTS:
             # StartupObject.SSLDataPackageService.SSLDataPackageServicePort = SSLDataPackagePort
             # StartupObject.SSLDataPackageService.SSLDataPackageServiceStatus = 'start'
 
-            StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
-            StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
-            StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
+            # TC 2021-02-21 (Sun) --
+            # StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
+            # StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
+            # StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
 
             StartupObject.FederationClientService.FederationClientServiceStatus = 'start'
 
@@ -585,7 +586,7 @@ class FTS:
             # StartupObject.SSLCoTService.SSLCoTServiceStatus = 'start'
             # StartupObject.SSLCoTService.SSLCoTServiceIP = SSLCoTIP
             # StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
-            self.start_restAPI_service(StartupObject)
+            # self.start_restAPI_service(StartupObject)
 
             self.start_all(StartupObject)
         
