@@ -15,7 +15,6 @@ from FreeTAKServer.controllers.AddDataToCoTList import AddDataToCoTList
 from FreeTAKServer.model.FilterGroup import FilterGroup
 from FreeTAKServer.controllers.services.SSLCoTServiceController import SSLCoTServiceController
 from FreeTAKServer.controllers.services.TCPCoTServiceController import TCPCoTServiceController
-from FreeTAKServer.controllers.services.TCPCoTServiceController import TCPCoTServiceController_v2
 from FreeTAKServer.controllers.services.federation.FederationClientService import FederationClientServiceController
 from FreeTAKServer.controllers.services.federation.federation import FederationServerService
 from FreeTAKServer.controllers.services.FederationServerServiceController import FederationServerServiceController
@@ -73,35 +72,15 @@ class FTS:
         except Exception as e:
             logger.error('an exception has been thrown in RestAPI Startup ' + str(e))
 
-    def f(self, name):                # TC 2021-02-21 (Sun) --
-        print('hello', name)
-    
-    def g(self, IP, CoTPort, Event, clientDataPipe, ReceiveConnectionKillSwitch, RestAPIPipe):
-        print('hello Hui')
-        
-            
     def start_CoT_service(self, FTSServiceStartupConfigObject):
-
-        # self.ClientDataPipe, ClientDataPipeParentChild = multiprocessing.Pipe()
-        # self.TCPCoTService, self.TCPCoTServiceFTSPipe = multiprocessing.Pipe(duplex=True)
-        # self.CoTPoisonPill = multiprocessing.Event()
-        # self.CoTPoisonPill.set()
-        # self.ReceiveConnectionsReset = multiprocessing.Event()
-        # self.CoTService = multiprocessing.Process (target=TCPCoTServiceController().start,
-        # self.CoTService = multiprocessing.Process (target=self.g,
-        #                                            args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP,
-        #                                                  FTSServiceStartupConfigObject.CoTService.CoTServicePort,
-        #                                                  self.CoTPoisonPill,
-        #                                                  ClientDataPipeParentChild,
-        #                                                  self.ReceiveConnectionsReset,
-        #                                                  self.TCPCoTService))
-        # self.CoTService.start()
-        print ("I am here")
-        self.delme = multiprocessing.Process (target=self.f, args=('bob',))
-        self.delme.start()
-        import sys
-        sys.exit(0)
         try:
+            self.ClientDataPipe, ClientDataPipeParentChild = multiprocessing.Pipe()
+            self.TCPCoTService, self.TCPCoTServiceFTSPipe = multiprocessing.Pipe(duplex=True)
+            self.CoTPoisonPill = multiprocessing.Event()
+            self.CoTPoisonPill.set()
+            self.ReceiveConnectionsReset = multiprocessing.Event()
+            self.CoTService = multiprocessing.Process(target=TCPCoTServiceController().start, args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP, FTSServiceStartupConfigObject.CoTService.CoTServicePort, self.CoTPoisonPill, ClientDataPipeParentChild, self.ReceiveConnectionsReset, self.TCPCoTService))
+            self.CoTService.start()
             self.pipeList['TCPCoTServiceFTSPipe'] = self.TCPCoTServiceFTSPipe
             self.FilterGroup.receivers.append(self.TCPCoTServiceFTSPipe)
             self.FilterGroup.sources.append(self.TCPCoTServiceFTSPipe)
@@ -562,58 +541,51 @@ class FTS:
             pass
 
     def startup(self, CoTPort, CoTIP, DataPackagePort, DataPackageIP, SSLDataPackagePort, SSLDataPackageIP, RestAPIPort, RestAPIIP, SSLCoTPort, SSLCoTIP, AutoStart, firstStart = False, UI="False"):
-        self.dbController.remove_user()
-        self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServiceStatus = 'start'
-        self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServicePort = RestAPIPort
-        self.FTSServiceStartupConfigObject.RestAPIServiceIP = RestAPIIP
-        if firstStart:
-            from datetime import datetime as dt
-            self.StartupTime = dt.now()
-        else:
-            pass
-
-        if AutoStart == 'False':
-            StartupObject = FTSObj()
-            StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
-            StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
-            StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
-            self.start_restAPI_service(StartupObject)
-
-        else:
-            StartupObject = FTSObj()
-            StartupObject.CoTService.CoTServiceIP = CoTIP
-            StartupObject.CoTService.CoTServicePort = CoTPort
-            StartupObject.CoTService.CoTServiceStatus = 'start'
-
-            StartupObject.TCPDataPackageService.TCPDataPackageServiceIP = DataPackageIP
-            StartupObject.TCPDataPackageService.TCPDataPackageServicePort = DataPackagePort
-            StartupObject.TCPDataPackageService.TCPDataPackageServiceStatus = 'start'
-            
-            # TC 2021-02-21 (Sun) --
-            # StartupObject.SSLDataPackageService.SSLDataPackageServiceIP = SSLDataPackageIP
-            # StartupObject.SSLDataPackageService.SSLDataPackageServicePort = SSLDataPackagePort
-            # StartupObject.SSLDataPackageService.SSLDataPackageServiceStatus = 'start'
-
-            # TC 2021-02-21 (Sun) --
-            # StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
-            # StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
-            # StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
-
-            StartupObject.FederationClientService.FederationClientServiceStatus = 'start'
-
-            #StartupObject.FederationServerService.FederationServerServiceStatus = ''
-
-            # TC 2021-02-21 (Sun) --
-            # StartupObject.SSLCoTService.SSLCoTServiceStatus = 'start'
-            # StartupObject.SSLCoTService.SSLCoTServiceIP = SSLCoTIP
-            # StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
-            # self.start_restAPI_service(StartupObject)
-
-            # self.start_all(StartupObject)
-            self.start_CoT_service(StartupObject)
-
-        1/0
         try:
+            self.dbController.remove_user()
+            self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServiceStatus = 'start'
+            self.FTSServiceStartupConfigObject.RestAPIService.RestAPIServicePort = RestAPIPort
+            self.FTSServiceStartupConfigObject.RestAPIServiceIP = RestAPIIP
+            if firstStart:
+                from datetime import datetime as dt
+                self.StartupTime = dt.now()
+            else:
+                pass
+            if AutoStart == 'False':
+                StartupObject = FTSObj()
+                StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
+                StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
+                StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
+                self.start_restAPI_service(StartupObject)
+
+            else:
+                StartupObject = FTSObj()
+                StartupObject.CoTService.CoTServiceIP = CoTIP
+                StartupObject.CoTService.CoTServicePort = CoTPort
+                StartupObject.CoTService.CoTServiceStatus = 'start'
+
+                StartupObject.TCPDataPackageService.TCPDataPackageServiceIP = DataPackageIP
+                StartupObject.TCPDataPackageService.TCPDataPackageServicePort = DataPackagePort
+                StartupObject.TCPDataPackageService.TCPDataPackageServiceStatus = 'start'
+
+                StartupObject.SSLDataPackageService.SSLDataPackageServiceIP = SSLDataPackageIP
+                StartupObject.SSLDataPackageService.SSLDataPackageServicePort = SSLDataPackagePort
+                StartupObject.SSLDataPackageService.SSLDataPackageServiceStatus = 'start'
+
+                StartupObject.RestAPIService.RestAPIServicePort = RestAPIPort
+                StartupObject.RestAPIService.RestAPIServiceIP = RestAPIIP
+                StartupObject.RestAPIService.RestAPIServiceStatus = 'start'
+
+                StartupObject.FederationClientService.FederationClientServiceStatus = 'start'
+
+                #StartupObject.FederationServerService.FederationServerServiceStatus = ''
+
+                StartupObject.SSLCoTService.SSLCoTServiceStatus = 'start'
+                StartupObject.SSLCoTService.SSLCoTServiceIP = SSLCoTIP
+                StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
+                self.start_restAPI_service(StartupObject)
+
+                self.start_all(StartupObject)
 
             while True:
                 try:
@@ -663,11 +635,8 @@ if __name__ == "__main__":
         parser.add_argument('-AutoStart', type=str, help='whether or not you want all services to start or only the root service and the RestAPI service', default='True')
         parser.add_argument('-UI', type=str, help="set to true if you would like to start UI on server startup")
         args = parser.parse_args()
+        AtakOfTheCerts().bake_startup()
+        CreateStartupFilesController()
+        FTS().startup(args.CoTPort, args.CoTIP, args.DataPackagePort, args.DataPackageIP, args.SSLDataPackagePort, args.SSLDataPackageIP, args.RestAPIPort, args.RestAPIIP, args.SSLCoTPort, args.SSLCoTIP, args.AutoStart, True, args.UI)
     except Exception as e:
         print(e)
-
-
-    AtakOfTheCerts().bake_startup()
-    CreateStartupFilesController()
-    FTS().startup(args.CoTPort, args.CoTIP, args.DataPackagePort, args.DataPackageIP, args.SSLDataPackagePort, args.SSLDataPackageIP, args.RestAPIPort, args.RestAPIIP, args.SSLCoTPort, args.SSLCoTIP, args.AutoStart, True, args.UI)
-        
