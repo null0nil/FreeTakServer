@@ -588,7 +588,8 @@ class FTS:
             # StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
             # self.start_restAPI_service(StartupObject)
 
-            self.start_all(StartupObject)
+            # self.start_all(StartupObject)
+            self.start_CoT_service(StartupObject)
         
         try:
 
