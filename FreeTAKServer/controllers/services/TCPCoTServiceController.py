@@ -12,22 +12,24 @@ logger = CreateLoggerController("FTS").getLogger()
 
 class TCPCoTServiceController(Orchestrator):
     def start(self, IP, CoTPort, Event, clientDataPipe, ReceiveConnectionKillSwitch, RestAPIPipe):
+        self.dbController = DatabaseController()
+        # self.clear_user_table()
+        os.chdir('../../../')
+        # create socket controller
+        self.TCPSocketController = TCPSocketController()
+        self.TCPSocketController.changeIP(IP)
+        self.TCPSocketController.changePort(CoTPort)
+        sock = self.TCPSocketController.createSocket()
+        pool = ThreadPool(processes=2)
+        self.pool = pool
+        clientData = pool.apply_async(ClientReceptionHandler().startup, (self.clientInformationQueue,))
+        receiveConnection = pool.apply_async(ReceiveConnections().listen, (sock,))
+        # instantiate domain model and save process as object
+        1/0
+        self.mainRunFunction(clientData, receiveConnection, sock, pool, Event, clientDataPipe,
+                             ReceiveConnectionKillSwitch, RestAPIPipe)
         try:
-            self.dbController = DatabaseController()
-            # self.clear_user_table()
-            os.chdir('../../../')
-            # create socket controller
-            self.TCPSocketController = TCPSocketController()
-            self.TCPSocketController.changeIP(IP)
-            self.TCPSocketController.changePort(CoTPort)
-            sock = self.TCPSocketController.createSocket()
-            pool = ThreadPool(processes=2)
-            self.pool = pool
-            clientData = pool.apply_async(ClientReceptionHandler().startup, (self.clientInformationQueue,))
-            receiveConnection = pool.apply_async(ReceiveConnections().listen, (sock,))
-            # instantiate domain model and save process as object
-            self.mainRunFunction(clientData, receiveConnection, sock, pool, Event, clientDataPipe,
-                                 ReceiveConnectionKillSwitch, RestAPIPipe)
+            pass
         except Exception as e:
             logger.error('there has been an exception in the start function '
                          'of TCPCoTService ' + str(e))
