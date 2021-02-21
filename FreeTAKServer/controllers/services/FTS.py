@@ -79,7 +79,15 @@ class FTS:
         self.CoTPoisonPill = multiprocessing.Event()
         self.CoTPoisonPill.set()
         self.ReceiveConnectionsReset = multiprocessing.Event()
-        self.CoTService = multiprocessing.Process(target=TCPCoTServiceController().start, args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP, FTSServiceStartupConfigObject.CoTService.CoTServicePort, self.CoTPoisonPill, ClientDataPipeParentChild, self.ReceiveConnectionsReset, self.TCPCoTService))
+        self.CoTService = multiprocessing.Process (target=TCPCoTServiceController().start,
+                                                   args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP,
+                                                         FTSServiceStartupConfigObject.CoTService.CoTServicePort,
+                                                         self.CoTPoisonPill,
+                                                         ClientDataPipeParentChild,
+                                                         self.ReceiveConnectionsReset,
+                                                         self.TCPCoTService))
+        print ("I am here")
+        1/0
         self.CoTService.start()
 
         try:
