@@ -82,11 +82,11 @@ class FTS:
             
     def start_CoT_service(self, FTSServiceStartupConfigObject):
 
-        self.ClientDataPipe, ClientDataPipeParentChild = multiprocessing.Pipe()
-        self.TCPCoTService, self.TCPCoTServiceFTSPipe = multiprocessing.Pipe(duplex=True)
-        self.CoTPoisonPill = multiprocessing.Event()
-        self.CoTPoisonPill.set()
-        self.ReceiveConnectionsReset = multiprocessing.Event()
+        # self.ClientDataPipe, ClientDataPipeParentChild = multiprocessing.Pipe()
+        # self.TCPCoTService, self.TCPCoTServiceFTSPipe = multiprocessing.Pipe(duplex=True)
+        # self.CoTPoisonPill = multiprocessing.Event()
+        # self.CoTPoisonPill.set()
+        # self.ReceiveConnectionsReset = multiprocessing.Event()
         # self.CoTService = multiprocessing.Process (target=TCPCoTServiceController().start,
         # self.CoTService = multiprocessing.Process (target=self.g,
         #                                            args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP,
@@ -98,7 +98,7 @@ class FTS:
         # self.CoTService.start()
         print ("I am here")
         self.delme = multiprocessing.Process (target=self.f, args=('bob',))
-        self.delme.start()
+        # self.delme.start()
         import sys
         sys.exit(0)
         try:
