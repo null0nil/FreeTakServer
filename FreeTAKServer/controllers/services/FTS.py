@@ -98,7 +98,7 @@ class FTS:
         # self.CoTService.start()
         print ("I am here")
         self.delme = multiprocessing.Process (target=self.f, args=('bob',))
-        # self.delme.start()
+        self.delme.start()
         import sys
         sys.exit(0)
         try:
