@@ -16,7 +16,22 @@ setup(
         "FreeTAKServer.controllers.services",
         "FreeTAKServer.controllers.DatabaseControllers",
         #        "FreeTAKServer.controllers.model",
+        "FreeTAKServer.controllers.ExCheckControllers",
+        "FreeTAKServer.controllers.SpecificCoTControllers",
+        "FreeTAKServer.controllers.RestMessageControllers",
+        "FreeTAKServer.controllers.serializers",
+        "FreeTAKServer.controllers.services.federation",
         "FreeTAKServer.model",
+        "FreeTAKServer.model.ExCheck",
+        "FreeTAKServer.model.SQLAlchemy",
+        "FreeTAKServer.model.SQLAlchemy.CoTTables",
+        "FreeTAKServer.model.sockets",
+        "FreeTAKServer.model.FTSModel",
+        "FreeTAKServer.model.FTSModelVariables",
+        "FreeTAKServer.model.ServiceObjects",
+        "FreeTAKServer.model.SpecificCoT",
+        "FreeTAKServer.model.RestMessages",
+        "FreeTAKServer.model.protobufModel",
 # TC 2021-02-20 (Sat) --
     ],  # Chose the same as "name"
     version=version,  # Start with a small number and increase it with every change you make
