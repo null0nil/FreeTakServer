@@ -15,6 +15,7 @@ from FreeTAKServer.controllers.AddDataToCoTList import AddDataToCoTList
 from FreeTAKServer.model.FilterGroup import FilterGroup
 from FreeTAKServer.controllers.services.SSLCoTServiceController import SSLCoTServiceController
 from FreeTAKServer.controllers.services.TCPCoTServiceController import TCPCoTServiceController
+from FreeTAKServer.controllers.services.TCPCoTServiceController import TCPCoTServiceController_v2
 from FreeTAKServer.controllers.services.federation.FederationClientService import FederationClientServiceController
 from FreeTAKServer.controllers.services.federation.federation import FederationServerService
 from FreeTAKServer.controllers.services.FederationServerServiceController import FederationServerServiceController
@@ -82,7 +83,8 @@ class FTS:
         self.CoTPoisonPill = multiprocessing.Event()
         self.CoTPoisonPill.set()
         self.ReceiveConnectionsReset = multiprocessing.Event()
-        self.CoTService = multiprocessing.Process (target=TCPCoTServiceController().start,
+        # self.CoTService = multiprocessing.Process (target=TCPCoTServiceController().start,
+        self.CoTService = multiprocessing.Process (target=TCPCoTServiceController_v2().start,
                                                    args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP,
                                                          FTSServiceStartupConfigObject.CoTService.CoTServicePort,
                                                          self.CoTPoisonPill,
