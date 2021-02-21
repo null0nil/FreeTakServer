@@ -72,6 +72,9 @@ class FTS:
         except Exception as e:
             logger.error('an exception has been thrown in RestAPI Startup ' + str(e))
 
+    def f(name):                # TC 2021-02-21 (Sun) --
+        print('hello', name)
+            
     def start_CoT_service(self, FTSServiceStartupConfigObject):
 
         self.ClientDataPipe, ClientDataPipeParentChild = multiprocessing.Pipe()
@@ -87,9 +90,10 @@ class FTS:
                                                          self.ReceiveConnectionsReset,
                                                          self.TCPCoTService))
         print ("I am here")
-        1/0
-        self.CoTService.start()
-
+        # self.CoTService.start()
+        self.delme = multiprocessing.Process (target=self.f, args=('bob',))
+        import sys
+        sys.exit(0)
         try:
             self.pipeList['TCPCoTServiceFTSPipe'] = self.TCPCoTServiceFTSPipe
             self.FilterGroup.receivers.append(self.TCPCoTServiceFTSPipe)
