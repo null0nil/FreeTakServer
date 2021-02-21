@@ -75,6 +75,9 @@ class FTS:
 
     # def f(name):                # TC 2021-02-21 (Sun) --
     #     print('hello', name)
+    def g(self, IP, CoTPort, Event, clientDataPipe, ReceiveConnectionKillSwitch, RestAPIPipe):
+        print('hello Hui')
+        
             
     def start_CoT_service(self, FTSServiceStartupConfigObject):
 
@@ -84,7 +87,8 @@ class FTS:
         self.CoTPoisonPill.set()
         self.ReceiveConnectionsReset = multiprocessing.Event()
         # self.CoTService = multiprocessing.Process (target=TCPCoTServiceController().start,
-        self.CoTService = multiprocessing.Process (target=TCPCoTServiceController_v2().start,
+        obj = TCPCoTServiceController_v2()
+        self.CoTService = multiprocessing.Process (target=self.g,
                                                    args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP,
                                                          FTSServiceStartupConfigObject.CoTService.CoTServicePort,
                                                          self.CoTPoisonPill,
