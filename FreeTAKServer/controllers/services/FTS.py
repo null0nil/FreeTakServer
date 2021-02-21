@@ -567,7 +567,8 @@ class FTS:
             StartupObject.TCPDataPackageService.TCPDataPackageServiceIP = DataPackageIP
             StartupObject.TCPDataPackageService.TCPDataPackageServicePort = DataPackagePort
             StartupObject.TCPDataPackageService.TCPDataPackageServiceStatus = 'start'
-
+            
+            # TC 2021-02-21 (Sun) --
             # StartupObject.SSLDataPackageService.SSLDataPackageServiceIP = SSLDataPackageIP
             # StartupObject.SSLDataPackageService.SSLDataPackageServicePort = SSLDataPackagePort
             # StartupObject.SSLDataPackageService.SSLDataPackageServiceStatus = 'start'
@@ -580,9 +581,10 @@ class FTS:
 
             #StartupObject.FederationServerService.FederationServerServiceStatus = ''
 
-            StartupObject.SSLCoTService.SSLCoTServiceStatus = 'start'
-            StartupObject.SSLCoTService.SSLCoTServiceIP = SSLCoTIP
-            StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
+            # TC 2021-02-21 (Sun) --
+            # StartupObject.SSLCoTService.SSLCoTServiceStatus = 'start'
+            # StartupObject.SSLCoTService.SSLCoTServiceIP = SSLCoTIP
+            # StartupObject.SSLCoTService.SSLCoTServicePort = SSLCoTPort
             self.start_restAPI_service(StartupObject)
 
             self.start_all(StartupObject)
