@@ -73,8 +73,9 @@ class FTS:
         except Exception as e:
             logger.error('an exception has been thrown in RestAPI Startup ' + str(e))
 
-    # def f(name):                # TC 2021-02-21 (Sun) --
-    #     print('hello', name)
+    def f(self, name):                # TC 2021-02-21 (Sun) --
+        print('hello', name)
+    
     def g(self, IP, CoTPort, Event, clientDataPipe, ReceiveConnectionKillSwitch, RestAPIPipe):
         print('hello Hui')
         
@@ -87,17 +88,17 @@ class FTS:
         self.CoTPoisonPill.set()
         self.ReceiveConnectionsReset = multiprocessing.Event()
         # self.CoTService = multiprocessing.Process (target=TCPCoTServiceController().start,
-        obj = TCPCoTServiceController_v2()
-        self.CoTService = multiprocessing.Process (target=self.g,
-                                                   args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP,
-                                                         FTSServiceStartupConfigObject.CoTService.CoTServicePort,
-                                                         self.CoTPoisonPill,
-                                                         ClientDataPipeParentChild,
-                                                         self.ReceiveConnectionsReset,
-                                                         self.TCPCoTService))
+        # self.CoTService = multiprocessing.Process (target=self.g,
+        #                                            args=(FTSServiceStartupConfigObject.CoTService.CoTServiceIP,
+        #                                                  FTSServiceStartupConfigObject.CoTService.CoTServicePort,
+        #                                                  self.CoTPoisonPill,
+        #                                                  ClientDataPipeParentChild,
+        #                                                  self.ReceiveConnectionsReset,
+        #                                                  self.TCPCoTService))
+        # self.CoTService.start()
         print ("I am here")
-        self.CoTService.start()
-        # self.delme = multiprocessing.Process (target=self.f, args=('bob',))
+        self.delme = multiprocessing.Process (target=self.f, args=('bob',))
+        self.delme.start()
         import sys
         sys.exit(0)
         try:
@@ -637,7 +638,6 @@ if __name__ == "__main__":
     y = FreeTAKServerUI.create_app()
     UIProc = multiprocessing.Process(target=FreeTAKServerUI.app, args=())
     UIProc.start()"""
-    print ("hello")
     try:
         parser = argparse.ArgumentParser(description=OrchestratorConstants().FULLDESC)
         parser.add_argument('-CoTPort', type=int, help=OrchestratorConstants().COTPORTDESC,
