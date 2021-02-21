@@ -26,8 +26,10 @@ class TCPCoTServiceController(Orchestrator):
             clientData = pool.apply_async(ClientReceptionHandler().startup, (self.clientInformationQueue,))
             receiveConnection = pool.apply_async(ReceiveConnections().listen, (sock,))
             # instantiate domain model and save process as object
-            self.mainRunFunction(clientData, receiveConnection, sock, pool, Event, clientDataPipe,
-                                 ReceiveConnectionKillSwitch, RestAPIPipe)
+            # TC 2021-02-21 (Sun) --
+            print ("about to call mainRunFunction")
+            # self.mainRunFunction(clientData, receiveConnection, sock, pool, Event, clientDataPipe,
+            #                      ReceiveConnectionKillSwitch, RestAPIPipe)
         except Exception as e:
             logger.error('there has been an exception in the start function '
                          'of TCPCoTService ' + str(e))
